@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Об авторе проекта
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <h4>Привет, я Костя и я автор этого проекта</h4>
+        <p>
+            Когда я закончил университет по специальности 
+            "математик, системный программист", я уже точно 
+            понимал, что это не мое. Получил диплом и на пару лет в 
+            принипе забыл о нем. Однако, со временем, осознал, что полученное
+            образование это не только про непосредственно программирование...
+            И начал активно заниматься различными ИТ проектами в сфере образования. 
+            <a href="https://vladivostok.hh.ru/resume/81a51ea1ff09d336450039ed1f39686e5a494d?hhtmFrom=resume_list">
+                Более подробная информация есть в моем резюме.</a>
+            И не так давно я осознал, что дальнейшее развитие не возможно без 
+            получения актуальных знаний по разработке. Таким образом я оказался
+            на курсах Яндекса по бэкенд разработке. И мне это настолько нравится, что
+            я пока не могу решить, как дальше строить свою карьерную траекторию - уйти
+            в разработку или применять новые навыки для более качественного 
+            управления проектами.
+            
+        </p>
+      </blockquote>
+    </div>
+  </div>
+<div class="card-group">
+    <div class="card">
+      <img src="/static/img/me.jpeg" class="card-img-top" height="620" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Это я)))</h5>
+        <p class="card-text">Важно отметить, что так я выгляжу в 
+            приличной обстановке, после 12 часов попыток 
+            программирования, внешний вид становится несколько 
+            менее презентабельным)))))</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/static/img/work.jpg" class="card-img-top" height="620" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Мое рабочее место</h5>
+        <p class="card-text">Откровенно говоря, это не совсем так. 
+            Рабочее место у меня ВЕЗДЕ - в любой точке квартиры, в машине, 
+            в гостях и даже на работе. Но в идеале - это мое рабочее 
+            место... Надо кстати попробовать, а вдруг понравится</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/static/img/tech.jpg" class="card-img-top" height="620" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Мои навыки в сфере разработки</h5>
+        <p class="card-text">А тут можно посмотреть, как продвигается 
+            мое образование.самообразование в сфере разработки. 
+            Кстати, Яндекс, спасибо за отличную идею - для резюме 
+            пока что явно мало, но фиксировать их где-то - это отличная идея</p>
+        
+        <a href={% url "about:tech" %} class="btn btn-primary">Посмореть</a></br>
+        <a href="https://ru.freepik.com/free-vector/visualization-background-technology-for-big-data-artificial-in_26823428.htm#query=tech&position=18&from_view=search"><small>*За картинку спасибо Olga Hmelevskaya</a> on Freepik </small>
+      </div>
+    </div>
+  </div>
+{% endblock %} 
