@@ -7,7 +7,7 @@ from .models import Follow, Group, Post, User
 from .utils import page_get
 
 
-#@cache_page(60 * 20)
+@cache_page(60 * 20)
 def index(request):
     post_list = Post.objects.all()
     page_obj = page_get(request, post_list)
@@ -32,8 +32,9 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     post_list = author.posts.all()
     following = False
-    if Follow.objects.filter(user=request.user, author=author).exists():
-        following = True
+    if request.user.is_authenticated:
+        if Follow.objects.filter(user=request.user, author=author).exists():
+            following = True
     page_obj = page_get(request, post_list)
     context = {
         'author': author,
@@ -113,13 +114,12 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if request.user.get_username() != username:
-        Follow.objects.create(
+    if request.user != get_object_or_404(User, username=username):
+        Follow.objects.get_or_create(
             user=request.user,
             author=User.objects.get(username=username)
         )
-        return redirect('posts:profile', username)
-    return redirect('posts:profile', username)
+    return redirect('posts:profile', username=username)
 
 
 @login_required

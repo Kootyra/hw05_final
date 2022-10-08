@@ -130,11 +130,11 @@ class PostPagesTest(TestCase):
         post_text_0 = first_object.text
         post_author_0 = first_object.author.username
         post_group_0 = first_object.group.title
-        '''post_image_0 = first_object.image'''
+        post_image_0 = first_object.image
         self.assertEqual(post_text_0, 'Тестовый пост №1- про тестирование!!!')
         self.assertEqual(post_author_0, 'auth')
         self.assertEqual(post_group_0, 'Тестовая группа')
-        '''self.assertEqual(post_image_0, 'posts/small.gif')'''
+        self.assertEqual(post_image_0, 'posts/small.gif')
 
     def test_group_show_correct_context(self):
         '''Проверяем контекст страницы группы'''
