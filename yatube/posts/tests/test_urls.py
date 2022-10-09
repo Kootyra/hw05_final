@@ -83,3 +83,27 @@ class PostUrlsTest(TestCase):
         '''Проверяем шаблон страницы редактирования для автора'''
         response = self.author.get(f'/posts/{self.post.pk}/edit/')
         self.assertTemplateUsed(response, 'posts/create_post.html')
+
+    def test_post_show_in_followers_feed(self):
+        """Новая запись пользователя появляется
+        в ленте тех, кто на него подписан"""
+        new_post = Post.objects.create(
+            author=self.author,
+            text='New Post',
+        )
+        self.follower_client.force_login(self.follower)
+        response = self.follower_client.get(reverse('posts:follow_index'))
+        posts = response.context['page_obj']
+        self.assertIn(new_post, posts, 'Поста нет')
+
+    def test_post_now_show_in_unfollowers_feed(self):
+        """Новая запись пользователя не появляется
+        в ленте тех, кто не подписан."""
+        new_post = Post.objects.create(
+            author=self.author,
+            text='New Post',
+        )
+        self.follower_client.force_login(self.user)
+        response = self.follower_client.get(reverse('posts:follow_index'))
+        posts = response.context['page_obj']
+        self.assertNotIn(new_post, posts, 'Пост есть')

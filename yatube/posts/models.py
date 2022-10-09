@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 User = get_user_model()
-CHARS_IN_RETURN_POST = 15
+CHARS_IN_RETURN_POST: int = 15
 
 
 class Group(models.Model):
