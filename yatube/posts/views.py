@@ -7,7 +7,7 @@ from .models import Follow, Group, Post, User
 from .utils import page_get
 
 
-#@cache_page(60 * 20)
+@cache_page(60 * 20)
 def index(request):
     post_list = Post.objects.all()
     page_obj = page_get(request, post_list)
