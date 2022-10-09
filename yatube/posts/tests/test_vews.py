@@ -2,16 +2,14 @@ import shutil
 import tempfile
 
 from django import forms
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
-from django.urls import reverse
-from django.core.cache import cache
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..models import Group, Post
+from ..models import Follow, Group, Post
 from ..utils import PAGES_FOR_PAGINATOR
 
 User = get_user_model()
@@ -26,6 +24,8 @@ class PostPagesTest(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
         cls.user2 = User.objects.create_user(username='noauth')
+        cls.author = User.objects.create_user(username='author')
+        cls.follower = User.objects.create_user(username='follower')
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='group1',
@@ -79,6 +79,8 @@ class PostPagesTest(TestCase):
         self.user2 = User.objects.get(username='auth')
         self.author = Client()
         self.author.force_login(self.user2)
+        self.follower_client = Client()
+        self.follower_client.force_login(self.follower)
 
     def test_pages_uses_correct_template(self):
         '''Проверяем корректность использования шаблонов'''
@@ -189,3 +191,28 @@ class PostPagesTest(TestCase):
             with self.subTest(value=value):
                 form_field = response.context.get('form').fields.get(value)
                 self.assertIsInstance(form_field, expected)
+
+    def test_authorized_client_follow(self):
+        """Авторизованный пользователь может подписываться на других
+        пользователей."""
+        self.follower_client.get(reverse('posts:profile_follow',
+                                 kwargs={'username': self.user}
+                                         ))
+        self.assertTrue(Follow.objects.filter(
+                        user=self.follower,
+                        author=self.user
+                        ).exists())
+
+    def test_authorized_client_unfollow(self):
+        """Авторизованный пользователь может отписываться от других
+        пользователей."""
+        Follow.objects.create(author=self.user,
+                              user=self.follower,
+                              )
+        self.follower_client.get(reverse('posts:profile_unfollow',
+                                 kwargs={'username': self.user}
+                                         ))
+        self.assertFalse(Follow.objects.filter(
+                         user=self.follower,
+                         author=self.user
+                         ).exists())
